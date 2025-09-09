@@ -34,7 +34,12 @@ const getWeatherData = async(city) => {
 
 //funçao anonima arrow
 const showWeatherData = async (city) => {
+    try{
     const data = await getWeatherData(city);
+
+    if (data.cod === "undefined") {
+        alert('Cidade não encontrada!');
+    }
 
     cityElement.innerText = data.name;
     tempElement.innerText = parseInt(data.main.temp);
@@ -43,11 +48,17 @@ const showWeatherData = async (city) => {
         'src',`http://openweathermap.org/img/wn/${data.weather[0].icon}.png`
     );
     countryElement.setAttribute('src',`https://flagsapi.com/${data.sys.country}/flat/64.png`);
-    humidityElement.innerText = `${data.main.humidity}`
+    humidityElement.innerText = `${data.main.humidity}%`
     windElement.innerText = `${data.wind.speed}km/h`
 
     weatherContainer.classList.remove('hide');
-
+    }catch{
+    Swal.fire({
+      icon: "error",
+      title: "Erro!",
+      text: "Não foi possível buscar os dados do clima.",
+    });
+}
 }
 
 //Eventos 
